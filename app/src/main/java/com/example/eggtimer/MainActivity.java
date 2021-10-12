@@ -2,6 +2,7 @@ package com.example.eggtimer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -15,17 +16,18 @@ public class MainActivity extends AppCompatActivity {
     SeekBar timerSeekBar;
 
     public void timer(View view) {
-        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(timerSeekBar.getProgress() * 1000 + 100, 1000) {
 
             @Override
             public void onTick(long l) {
                 updateTimer((int) l / 1000);
 
             }
-
+            //plays sound when timer is finished
             @Override
             public void onFinish() {
-                Log.i("Finished Timer", "All done");
+                MediaPlayer mpplayer = MediaPlayer.create(getApplicationContext(),R.raw.zhu);
+                mpplayer.start();
 
             }
         }.start();
@@ -37,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         String secondString = Integer.toString(seconds);
 
-        if (secondString.equals("0")) {
-            secondString = "00";
+        if (seconds <= 9) {
+            secondString = "0" + secondString;
 
         }
 

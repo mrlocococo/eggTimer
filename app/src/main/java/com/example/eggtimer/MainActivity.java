@@ -19,62 +19,6 @@ public class MainActivity extends AppCompatActivity {
     Button goButton;
     CountDownTimer countDownTimer;
 
-    public void resetTimer() {
-
-        timerTextView.setText("0:30");
-        timerSeekBar.setProgress(30);
-        timerSeekBar.setEnabled(true);
-        countDownTimer.cancel();
-        goButton.setText("Start!");
-        counterIsActive = false;
-    }
-
-    public void timer(View view) {
-
-        if (counterIsActive) {
-
-            resetTimer();
-
-        } else {
-
-            counterIsActive = true;
-            timerSeekBar.setEnabled(false);
-            goButton.setText("STOP!");
-
-            countDownTimer = new CountDownTimer(timerSeekBar.getProgress() * 1000 + 100, 1000) {
-
-                @Override
-                public void onTick(long l) {
-                    updateTimer((int) l / 1000);
-
-                }
-
-                //plays sound when timer is finished
-                @Override
-                public void onFinish() {
-                    MediaPlayer mpplayer = MediaPlayer.create(getApplicationContext(), R.raw.zhu);
-                    mpplayer.start();
-                    resetTimer();
-
-                }
-            }.start();
-        }
-    }
-
-    public void updateTimer(int secondsLeft) {
-        int minutes = secondsLeft / 60;
-        int seconds = secondsLeft - (minutes * 60);
-
-        String secondString = Integer.toString(seconds);
-
-        if (seconds <= 9) {
-            secondString = "0" + secondString;
-
-        }
-
-        timerTextView.setText(Integer.toString(minutes) + ":" + secondString);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,4 +50,61 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    public void resetTimer() {
+
+        timerTextView.setText(R.string.base_timer);
+        timerSeekBar.setProgress(30);
+        timerSeekBar.setEnabled(true);
+        countDownTimer.cancel();
+        goButton.setText(R.string.start);
+        counterIsActive = false;
+    }
+
+    public void timer(View view) {
+
+        if (counterIsActive) {
+
+            resetTimer();
+
+        } else {
+
+            counterIsActive = true;
+            timerSeekBar.setEnabled(false);
+            goButton.setText(R.string.stop);
+
+            countDownTimer = new CountDownTimer(timerSeekBar.getProgress() * 1000L + 100, 1000) {
+
+                @Override
+                public void onTick(long l) {
+                    updateTimer((int) l / 1000);
+
+                }
+
+                //plays sound when timer is finished
+                @Override
+                public void onFinish() {
+                    MediaPlayer mpPlayer = MediaPlayer.create(getApplicationContext(), R.raw.zhu);
+                    mpPlayer.start();
+                    resetTimer();
+
+                }
+            }.start();
+        }
+    }
+
+    public void updateTimer(int secondsLeft) {
+        int minutes = secondsLeft / 60;
+        int seconds = secondsLeft - (minutes * 60);
+
+        String secondString = Integer.toString(seconds);
+
+        if (seconds <= 9) {
+            secondString = "0" + secondString;
+
+        }
+
+        timerTextView.setText(Integer.toString(minutes) + ":" + secondString);
+    }
+
 }
